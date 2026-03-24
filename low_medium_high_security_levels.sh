@@ -44,15 +44,6 @@ else
     echo "Result: ACCESS DENIED"
     echo "Admin functionality not accessible"
 fi
-#if echo "$HTML" | grep -q "Unauthorised"; then
-#    echo "Result: ACCESS DENIED"
-#    echo "Message: Unauthorised"
-#else
-#    echo "Result: ACCESS GRANTED (Potential Authorisation Bypass)"
-#    echo ""
-#    echo "Evidence:"
-#    echo "$HTML" | grep "Welcome to the user manager" | sed 's/^[[:space:]]*//'
-#fi
 
 }> /home/kali/auth_bypass.log 2>&1
 
